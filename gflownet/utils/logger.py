@@ -126,7 +126,11 @@ class Logger:
         self, pbar, losses, rewards, jsd, step, use_context=True, n_mean=100
     ):
         if self.progress:
-            mean_main_loss = np.mean(np.array(losses)[-n_mean:, 0], axis=0)
+            losses_array = np.array(losses)
+            if losses_array.ndim == 1:
+                mean_main_loss = np.mean(losses_array[-n_mean:], axis=0)
+            else:
+                mean_main_loss = np.mean(losses_array[-n_mean:, 0], axis=0)
             description = "Loss: {:.4f} | Mean rewards: {:.2f} | JSD: {:.4f}".format(
                 mean_main_loss, np.mean(rewards), jsd
             )
